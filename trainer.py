@@ -6,7 +6,7 @@ import numpy as np
 from sklearn.metrics import roc_auc_score, average_precision_score, roc_curve, confusion_matrix, precision_recall_curve, \
     precision_score
 from sklearn.metrics import f1_score
-from models import binary_cross_entropy, cross_entropy_logits, entropy_logits, RandomLayer, DRPNet  # 引入新的模型类
+from models import binary_cross_entropy, cross_entropy_logits, entropy_logits, RandomLayer, DRPNet 
 from prettytable import PrettyTable
 from tqdm import tqdm
 import configs
@@ -142,8 +142,6 @@ class Trainer(object):
             compound_graph = compound_graph.to(self.device)
             drug_graph = drug_graph.to(self.device)
             labels = labels.float().to(self.device)
-
-            # 化合物SMILES处理
             compound_smiles_list = list(compound_smiles)
             compound_tokenized_smiles = [
                 self.tokenizer(smile, return_tensors='pt', padding=True, truncation=True, max_length=144) for smile in
@@ -160,8 +158,6 @@ class Trainer(object):
                 'input_ids': compound_input_ids,
                 'attention_mask': compound_attention_masks
             }
-
-            # 药物SMILES处理
             drug_smiles_list = list(drug_smiles)
             drug_tokenized_smiles = [
                 self.tokenizer(smile, return_tensors='pt', padding=True, truncation=True, max_length=144) for smile in
@@ -181,7 +177,6 @@ class Trainer(object):
             cell_expression_tensor = cell_expression_tensor.to(self.device)
 
             self.optim.zero_grad()
-            # 更新模型的输入参数
             score, _ = self.model(compound_graph, compound_batched_input, drug_graph, drug_batched_input,
                                   cell_expression_tensor)
             if self.config["DECODER"]["BINARY"] == 1:
@@ -219,7 +214,6 @@ class Trainer(object):
                 drug_graph = drug_graph.to(self.device)
                 labels = labels.float().to(self.device)
 
-                # 化合物SMILES处理
                 compound_smiles_list = list(compound_smiles)
                 compound_tokenized_smiles = [
                     self.tokenizer(smile, return_tensors='pt', padding=True, truncation=True, max_length=144) for smile
@@ -238,7 +232,6 @@ class Trainer(object):
                     'attention_mask': compound_attention_masks
                 }
 
-                # 药物SMILES处理
                 drug_smiles_list = list(drug_smiles)
                 drug_tokenized_smiles = [
                     self.tokenizer(smile, return_tensors='pt', padding=True, truncation=True, max_length=144) for smile
@@ -280,21 +273,17 @@ class Trainer(object):
         auprc = average_precision_score(y_label, y_pred)
 
         if dataloader == "test":
-            # 使用固定阈值0.5生成二分类预测
             y_pred_binary = [1 if pred >= 0.5 else 0 for pred in y_pred]
-
-            # 计算所有指标
             cm = confusion_matrix(y_label, y_pred_binary)
             tn, fp, fn, tp = cm.ravel()
 
             accuracy = (tp + tn) / (tp + tn + fp + fn)
-            sensitivity = tp / (tp + fn + 1e-10)  # 召回率/敏感度
+            sensitivity = tp / (tp + fn + 1e-10)  
             specificity = tn / (tn + fp + 1e-10)
-
-            # 直接调用sklearn的f1_score
             f1 = f1_score(y_label, y_pred_binary)
-            precision = tp / (tp + fp + 1e-10)  # 精确率
+            precision = tp / (tp + fp + 1e-10)  
 
             return auroc, auprc, f1, sensitivity, specificity, accuracy, test_loss, 0.5, precision
         else:
+
             return auroc, auprc, test_loss
