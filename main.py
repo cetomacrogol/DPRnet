@@ -46,7 +46,6 @@ def main():
     df_train = pd.read_csv(train_path)
     df_val = pd.read_csv(val_path)
     df_test = pd.read_csv(test_path)
-    # 根据路径推断数据类型
     if "train.csv" in train_path:
         data_type = "train"
         print(f"Inferred data type for train path: {data_type}")
