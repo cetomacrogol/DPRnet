@@ -31,7 +31,7 @@ To trainDPRnet, where we provide the basic configurations for all hyperparameter
 
 
 ```
-$ python main.py --cfg "configs/DPRnet.yaml" --data ${DRtest} 
+$ python main.py --cfg "configs/DPRnet.yaml" --data DRtest
 ```
 
 
