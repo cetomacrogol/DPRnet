@@ -22,7 +22,7 @@ rdkit~=2022.3.3
 ## Datasets
 Here’s a suggestion for your README:
 
-The `datasets` folder contains the experimental data used in this framework, which is sourced from [ChemBL](https://www.ebi.ac.uk/chembl/). Additionally, a pre-trained model, [ChemBERTa](https://huggingface.co/seyonec/ChemBERTa-zinc-base-v1), is utilized to process molecular representations for the task.
+The `datasets` folder contains the experimental data used in this framework, which is sourced from [ChEMBL](https://www.ebi.ac.uk/chembl/). Additionally, a pre-trained model, [ChemBERTa](https://huggingface.co/seyonec/ChemBERTa-zinc-base-v1), is utilized to process molecular representations for the task.
 
 
 ## Run DPRnet on Our Data to Reproduce Results
