@@ -2,9 +2,12 @@
 
 ## Introduction
 
+DPRnet is a deep learning framework designed to predict candidate drugs that can reverse tumor cell drug resistance. The model integrates molecular graph data, SMILES embeddings, and gene expression profiles, utilizing a multi-head attention mechanism to capture cross-modal relationships. Deeprnet leverages the ChemBERTa-zinc-base-v1 pre-trained model, a state-of-the-art transformer-based model for molecular representations.
+This robust and interpretable framework has been validated on independent datasets and demonstrated high prediction accuracy. DPRnet also identifies chemical substructures associated with drug resistance reversal, providing valuable insights for drug discovery.
+We also provide an interactive web platform where users can submit their data and perform predictions.
 
 ## System Requirements
-The source code developed in Python 3.8 using PyTorch 1.7.1. The required python dependencies are given below. DrugBAN is supported for any standard computer and operating system (Windows/macOS/Linux) with enough RAM to run. There is no additional non-standard hardware requirements.
+The source code developed in Python 3.8 using PyTorch 1.7.1. The required python dependencies are given below. 
 
 ```
 torch>=1.7.1
@@ -15,56 +18,22 @@ scikit-learn>=0.24.2
 pandas
 rdkit~=2022.3.3
 ```
-## Installation Guide
-Clone this Github repo and set up a new conda environment. It normally takes about 10 minutes to install on a normal desktop computer.
-```
-# create a new conda environment
-$ conda create --name drugban python=3.8
-$ conda activate drugban
-
-# install requried python dependencies
-$ conda install pytorch==1.7.1 torchvision==0.8.2 torchaudio==0.7.2 cudatoolkit=10.2 -c pytorch
-$ conda install -c dglteam dgl-cuda10.2==0.7.1
-$ conda install -c conda-forge rdkit==2021.03.2
-$ pip install dgllife==0.2.8
-$ pip install -U scikit-learn
-$ pip install yacs
-$ pip install prettytable
-
-# clone the source code of DrugBAN
-$ git clone https://github.com/pz-white/DrugBAN.git
-$ cd DrugBAN
-```
-
 
 ## Datasets
-The `datasets` folder contains all experimental data used in DrugBAN: [BindingDB](https://www.bindingdb.org/bind/index.jsp) [1], [BioSNAP](https://github.com/kexinhuang12345/MolTrans) [2] and [Human](https://github.com/lifanchen-simm/transformerCPI) [3]. 
-In `datasets/bindingdb` and `datasets/biosnap` folders, we have full data with two random and clustering-based splits for both in-domain and cross-domain experiments.
-In `datasets/human` folder, there is full data with random split for the in-domain experiment, and with cold split to alleviate ligand bias.
+Here’s a suggestion for your README:
 
-## Demo
-We provide DrugBAN running demo through a cloud Jupyter notebook on [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/pz-white/DrugBAN/blob/main/drugban_demo.ipynb). Note it is based on a small sample dataset of bindingdb due to the resource limitation of a free colab account. This demo only takes 3 minutes to complete the training and testing process. For running DrugBAN on the full dataset, we advise GPU ram >= 8GB and CPU ram >= 16GB.
-
-The **expected output and run time** of demo has been provided in the colab notebook for verification.
+The `datasets` folder contains the experimental data used in this framework, which is sourced from [ChemBL](https://www.ebi.ac.uk/chembl/). Additionally, a pre-trained model, [ChemBERTa](https://huggingface.co/seyonec/ChemBERTa-zinc-base-v1), is utilized to process molecular representations for the task.
 
 
-## Run DrugBAN on Our Data to Reproduce Results
+## Run DPRnet on Our Data to Reproduce Results
 
-To train DrugBAN, where we provide the basic configurations for all hyperparameters in `config.py`. For different in-domain and cross-domain tasks, the customized task configurations can be found in respective `configs/*.yaml` files.
+To trainDPRnet, where we provide the basic configurations for all hyperparameters in `config.py`. 
 
-For the in-domain experiments with vanilla DrugBAN, you can directly run the following command. `${dataset}` could either be `bindingdb`, `biosnap` and `human`. `${split_task}` could be `random` and `cold`. 
+
 ```
-$ python main.py --cfg "configs/DrugBAN.yaml" --data ${dataset} --split ${split_task}
+$ python main.py --cfg "configs/DPRnet.yaml" --data ${DRtest} 
 ```
 
-For the cross-domain experiments with vanilla DrugBAN, you can directly run the following command. `${dataset}` could beither `bindingdb`, `biosnap`.
-```
-$ python main.py --cfg "configs/DrugBAN_Non_DA.yaml" --data ${dataset} --split "cluster"
-```
-For the cross-domain experiments with CDAN DrugBAN, you can directly run the following command. `${dataset}` could beither `bindingdb`, `biosnap`.
-```
-$ python main.py --cfg "configs/DrugBAN_DA.yaml" --data ${dataset} --split "cluster"
-```
 
 ## Comet ML
 [Comet ML](https://www.comet.com/site/) is an online machine learning experimentation platform, which help researchers to track and monitor their ML experiments. We provide Comet ML support to easily monitor training process in our code.
