@@ -16,7 +16,6 @@ class DTIDataset(data.Dataset):
         self.bond_featurizer = CanonicalBondFeaturizer(self_loop=True)
         self.fc = partial(smiles_to_bigraph, add_self_loop=True)
 
-        # 读取细胞基因表达数据
         self.cell_expression_data = pd.read_csv('cancer_gene_effects_all.csv')
         self.cell_expression_data.set_index('gene', inplace=True)
 
@@ -25,12 +24,10 @@ class DTIDataset(data.Dataset):
 
     def __getitem__(self, index):
         index = self.list_IDs[index]
-        # 化合物 SMILES
         compound_smiles = self.df.iloc[index]['compound_smiles']
         compound_graph = self.fc(smiles=compound_smiles, node_featurizer=self.atom_featurizer, edge_featurizer=self.bond_featurizer)
         compound_graph = self._pad_graph(compound_graph)
 
-        # 药物 SMILES
         drug_smiles = self.df.iloc[index]['drug_smiles']
         drug_graph = self.fc(smiles=drug_smiles, node_featurizer=self.atom_featurizer, edge_featurizer=self.bond_featurizer)
         drug_graph = self._pad_graph(drug_graph)
@@ -38,7 +35,7 @@ class DTIDataset(data.Dataset):
         y = self.df.iloc[index]["label"]
 
         cell = self.df.iloc[index]['cell']
-        # 获取细胞基因表达数据
+
         cell_expression = self.cell_expression_data[cell].values
         cell_expression_tensor = torch.tensor(cell_expression, dtype=torch.float32)
 
