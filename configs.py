@@ -1,0 +1,73 @@
+from yacs.config import CfgNode as CN
+
+_C = CN()
+
+# Compound feature extractor
+_C.COMPOUND = CN()
+_C.COMPOUND.NODE_IN_FEATS = 75
+_C.COMPOUND.PADDING = True
+_C.COMPOUND.HIDDEN_LAYERS = [128, 128, 128]
+_C.COMPOUND.NODE_IN_EMBEDDING = 128
+_C.COMPOUND.MAX_NODES = 290
+
+# SMILES feature extractor
+_C.SMILES = CN()
+_C.SMILES.NUM_FILTERS = [128, 128, 128]
+_C.SMILES.KERNEL_SIZE = [3, 6, 9]
+_C.SMILES.EMBEDDING_DIM = 128
+_C.SMILES.PADDING = True
+
+_C.CHEMBERTA = CN()
+_C.CHEMBERTA.OUTPUT_DIM = 128
+
+_C.DRUG_CELL = CN()
+_C.DRUG_CELL.OUTPUT_DIM = 128
+
+# 细胞基因表达数据处理配置
+_C.CELL_EXPRESSION = CN()
+_C.CELL_EXPRESSION.IN_FEATS = 949
+_C.CELL_EXPRESSION.HIDDEN_LAYERS = [512, 256, 128]
+
+# 药物处理配置，但是这个应该用不上，和上面的化合物一致即可
+_C.RESISTANT_DRUG = CN()
+_C.RESISTANT_DRUG.EMBEDDING_DIM = 128
+_C.RESISTANT_DRUG.FC_HIDDEN_LAYERS = [128, 128]
+
+
+# MLP decoder
+_C.DECODER = CN()
+_C.DECODER.NAME = "MLP"
+_C.DECODER.IN_DIM = 256
+_C.DECODER.HIDDEN_DIM = 512
+_C.DECODER.OUT_DIM = 128
+_C.DECODER.BINARY = 1
+
+# SOLVER
+_C.SOLVER = CN()
+_C.SOLVER.MAX_EPOCH = 100
+_C.SOLVER.BATCH_SIZE = 64
+_C.SOLVER.NUM_WORKERS = 0
+_C.SOLVER.LR = 1e-5
+# _C.SOLVER.LR = 5e-5，这个是优化器的学习率
+_C.SOLVER.DA_LR = 1e-3
+_C.SOLVER.SEED = 2048
+
+
+# RESULT
+_C.RESULT = CN()
+_C.RESULT.OUTPUT_DIR = "./result"
+_C.RESULT.SAVE_MODEL = True
+
+_C.CHEMBERTA.MODEL_PATH = './ChemBERTa-zinc-base-v1'
+
+# Comet config, ignore it If not installed.
+_C.COMET = CN()
+# Please change to your own workspace name on comet.
+_C.COMET.WORKSPACE = "pz - white"
+_C.COMET.PROJECT_NAME = "DRPNet"
+_C.COMET.USE = False
+_C.COMET.TAG = None
+
+
+def get_cfg_defaults():
+    return _C.clone()

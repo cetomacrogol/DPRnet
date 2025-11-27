@@ -1,0 +1,14 @@
+SOLVER:
+  BATCH_SIZE: 64
+  MAX_EPOCH: 100
+  LR: 5e-5
+  SEED: 42
+
+DECODER:
+  BINARY: 1
+
+# Config below only when you use comet
+COMET:
+  PROJECT_NAME: "DRPNet_Vanilla"
+  TAG: "Non_DA"
+
